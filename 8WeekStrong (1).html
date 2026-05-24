@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8 Week Strong — Balance Fitness and Nutrition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #4A7C59;
+    --green-dark: #2d4f38;
+    --green-light: #e8f0eb;
+    --green-mid: #6a9d78;
+    --cream: #faf8f4;
+    --dark: #1e2420;
+    --mid: #4a5249;
+    --light: #8a9589;
+    --accent: #c8a96e;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(30,36,32,0.10);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--green-dark);
+    padding: 32px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -20px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  /* WEEK SELECTOR */
+  .week-nav {
+    background: var(--white);
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .week-nav-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-bottom: 10px;
+  }
+  .week-pills {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .week-pills::-webkit-scrollbar { display: none; }
+  .week-pill {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid var(--green-light);
+    background: var(--green-light);
+    color: var(--green);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .week-pill.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .week-pill:hover:not(.active) {
+    border-color: var(--green-mid);
+  }
+
+  /* MAIN CONTENT */
+  .container { padding: 20px 16px; max-width: 480px; margin: 0 auto; }
+
+  /* WEEK HERO */
+  .week-hero {
+    background: var(--green);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .week-hero::after {
+    content: attr(data-week);
+    position: absolute;
+    right: -10px; top: -10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 100px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+  }
+  .week-hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .week-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+  }
+  .week-hero-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--light);
+    margin-top: 2px;
+  }
+
+  /* WORKOUT */
+  .exercise-list { display: flex; flex-direction: column; gap: 10px; }
+  .exercise-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--cream);
+    border-radius: 10px;
+  }
+  .exercise-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .exercise-info { flex: 1; }
+  .exercise-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .exercise-detail {
+    font-size: 12px;
+    color: var(--light);
+    margin-top: 2px;
+  }
+  .exercise-check {
+    width: 24px; height: 24px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .exercise-check.done {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  /* NUTRITION */
+  .nutrition-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .nutrition-card {
+    background: var(--green-light);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .nutrition-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+  }
+  .nutrition-card p {
+    font-size: 12.5px;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+  .nutrition-tip {
+    background: var(--cream);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* HABIT TRACKER */
+  .habit-list { display: flex; flex-direction: column; gap: 8px; }
+  .habit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--cream);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .habit-item.checked {
+    background: var(--green-light);
+  }
+  .habit-check {
+    width: 22px; height: 22px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .habit-item.checked .habit-check {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .habit-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark);
+    flex: 1;
+  }
+  .habit-item.checked .habit-label {
+    color: var(--green-dark);
+  }
+  .habit-emoji { font-size: 18px; }
+
+  /* JOURNAL */
+  .journal-textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid var(--green-light);
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    resize: none;
+    outline: none;
+    background: var(--cream);
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+  .journal-textarea:focus {
+    border-color: var(--green);
+  }
+  .journal-prompt {
+    font-size: 13px;
+    color: var(--light);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .save-btn {
+    margin-top: 10px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .save-btn:hover { background: var(--green-dark); }
+  .saved-note {
+    font-size: 12px;
+    color: var(--green);
+    margin-top: 8px;
+    display: none;
+  }
+
+  /* PORTION GUIDE */
+  .portion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .portion-item {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .portion-emoji { font-size: 24px; margin-bottom: 6px; }
+  .portion-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+  .portion-size {
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .portion-desc {
+    font-size: 11px;
+    color: var(--light);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* PROGRESS BAR */
+  .progress-section {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .progress-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .progress-pct {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .progress-bar {
+    height: 8px;
+    background: var(--green-light);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 100px;
+    transition: width 0.6s ease;
+  }
+  .progress-weeks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .progress-dot {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--green-light);
+    border: 2px solid var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--light);
+    transition: all 0.3s;
+  }
+  .progress-dot.done {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .progress-dot.current {
+    background: white;
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 14px;
+  }
+  .section-divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.08); }
+  .section-divider-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    white-space: nowrap;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--light);
+  }
+  .footer strong { color: var(--green); }
+
+  /* HIDDEN */
+  .week-content { display: none; }
+  .week-content.active { display: block; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .week-content.active { animation: fadeUp 0.3s ease; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Balance Fitness and Nutrition</div>
+  <h1>8 Week Strong</h1>
+  <div class="header-sub">Balance Fitness and Nutrition  ·  Christin Fisher</div>
+</div>
+
+<div class="week-nav">
+  <div class="week-nav-label">Select Your Week</div>
+  <div class="week-pills" id="weekPills"></div>
+</div>
+
+<div class="container" id="mainContent"></div>
+
+<div class="footer">
+  <strong>8 Week Strong</strong> · Balance Fitness and Nutrition<br>
+   · @christin_fisher
+</div>
+
+<script>
+const weeks = [
+  {
+    num: 1,
+    title: "Discovery & Foundation",
+    desc: "Welcome to 8 Week Strong. This week is about showing up, learning the movements, and beginning to understand your body. No pressure — just presence.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "March in place 1 min · Arm circles 30 sec · Hip circles 30 sec · Leg swings 30 sec each · Bodyweight squat x 10 slow" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "3 rounds. Rest 45-60 sec between exercises." },
+      { name: "Squat", detail: "Foundation: Bodyweight squat × 12 — focus on depth and chest tall | Strong: Goblet squat with light KB or DB × 12" },
+      { name: "Push", detail: "Foundation: Incline push up on bench × 10 | Strong: Full push up × 10-12" },
+      { name: "Hinge", detail: "Foundation: Glute bridge on floor × 15 — squeeze hard at top | Strong: Hip thrust on bench × 15 with bodyweight" },
+      { name: "Core", detail: "Foundation: Dead bug × 8 each side — slow and controlled | Strong: Plank hold × 30-40 seconds" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "2 rounds, 30 sec work / 30 sec rest: Bodyweight squat · Step back lunge (alternating) · Push up · Glute bridge · Rest 1 min between rounds" },
+    ],
+    journal: "What brought you here? What do you want to feel like in 8 weeks?",
+    nutrition_pre: "Eat a light meal or snack 60-90 min before training. Think: oatmeal, banana with nut butter, or Greek yogurt.",
+    nutrition_post: "Within 30-60 min after training: protein + carbs. Think: chicken and rice, eggs and toast, or a protein shake with fruit.",
+    nutrition_tip: "This week just focus on one thing — eat until you're satisfied, not stuffed. Use your hand as a guide.",
+    week_focus: "Notice how your body feels. There are no bad sessions — only information. Every rep is a deposit in your future self."
+  },
+  {
+    num: 2,
+    title: "Building the Base",
+    desc: "You showed up last week. Now we build on it. Focus on movement quality over everything else this week. Slow reps teach your body the right patterns.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Jumping jacks 30 sec · Hip hinge practice × 10 · Band pull apart × 15 · World's greatest stretch × 5 each side · Squat to stand × 8" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "3 rounds. Rest 45-60 sec between exercises." },
+      { name: "Squat", detail: "Foundation: Goblet squat × 12 with light KB or DB | Strong: Goblet squat × 12 with moderate weight — add 5 lbs from last week" },
+      { name: "Pull", detail: "Foundation: Dumbbell bent over row × 10 each side with light weight | Strong: Dumbbell row × 10 each side with moderate weight — brace core" },
+      { name: "Hinge", detail: "Foundation: Romanian deadlift with light DBs × 12 — feel the hamstrings load | Strong: Romanian deadlift with moderate DBs or barbell × 12" },
+      { name: "Core", detail: "Foundation: Dead bug × 10 each side | Strong: Plank hold × 40 seconds + 10 shoulder taps" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "2 rounds, 35 sec work / 25 sec rest: Goblet squat · DB row (alt sides) · RDL · Dead bug · Rest 90 sec between rounds" },
+    ],
+    journal: "What felt hard this week? What surprised you about your body?",
+    nutrition_pre: "Same principle — light, balanced, 60-90 min before. Avoid training on a full stomach.",
+    nutrition_post: "Protein is your priority. Aim for 25-30g within an hour. Greek yogurt, cottage cheese, eggs, chicken all work.",
+    nutrition_tip: "Protein this week — palm size at every meal. Start there and build from it.",
+    week_focus: "If something hurts — not muscle soreness, actual pain — tell Christin. Every movement can be modified. Always."
+  },
+  {
+    num: 3,
+    title: "Finding Your Rhythm",
+    desc: "Three weeks in. The habit is forming. Your body is adapting faster than you think. This week we add a little more challenge — you are ready for it.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Jog or march in place 1 min · Lateral shuffle 30 sec each way · Hip circles · Inchworm × 6 · Band glute walk × 10 each direction" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "3 rounds. Rest 45 sec between exercises." },
+      { name: "Squat + Push", detail: "Foundation: Goblet squat × 10 then DB shoulder press × 10 — separate movements | Strong: Squat to press (DB) × 10 — squat down, press overhead on way up" },
+      { name: "Hinge + Pull", detail: "Foundation: RDL × 12 then bent row × 10 each side | Strong: Single leg RDL × 8 each side — slow and controlled" },
+      { name: "Lunge", detail: "Foundation: Reverse lunge alternating × 10 each leg bodyweight | Strong: Reverse lunge with DBs × 10 each leg" },
+      { name: "Core", detail: "Foundation: Plank hold × 30 sec + dead bug × 8 each | Strong: Plank × 45 sec + 12 shoulder taps + 10 reach-throughs" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "AMRAP 8 min (as many rounds as possible): 8 goblet squats · 8 DB rows each side · 10 reverse lunges · 20 sec plank. Count your rounds — try to beat it next time." },
+    ],
+    journal: "What mindset thing are you doing for yourself this week? Meditation, journaling, a walk alone? Write about it.",
+    nutrition_pre: "If you train in the morning — at minimum have a banana or half a piece of toast. Don't train completely fasted.",
+    nutrition_post: "Recovery starts the moment you finish training. Hydrate first, then eat within the hour.",
+    nutrition_tip: "Vegetables should take up half your plate. Fill the other half with protein and a small portion of complex carbs.",
+    week_focus: "Consistency beats perfection every single time. You don't have to feel great to show up. Just show up."
+  },
+  {
+    num: 4,
+    title: "Halfway — Check In",
+    desc: "Four weeks down. You are halfway. Take a moment to appreciate that — then let's keep going stronger than ever.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Jump rope or jumping jacks 1 min · Hip hinge × 10 · Lateral lunge × 8 each · Banded squat × 12 · Arm swings 30 sec" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "4 rounds this week — you are ready. Rest 45 sec between exercises." },
+      { name: "Squat", detail: "Foundation: Goblet squat × 12 — try adding a little more weight than week 3 | Strong: Barbell or KB front squat × 10 — if comfortable with the rack" },
+      { name: "Push", detail: "Foundation: Push up × 12 — full or incline, try one more than last week | Strong: DB bench press or floor press × 10 each" },
+      { name: "Hinge", detail: "Foundation: Hip thrust on bench bodyweight × 15 | Strong: Hip thrust with DB or barbell on hips × 12" },
+      { name: "Carry", detail: "Foundation: Farmer carry with light DBs × 40 seconds — walk tall, shoulders back | Strong: Farmer carry with heavy DBs or KBs × 40 sec — challenge your grip" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "3 rounds, 30 sec work / 20 sec rest: KB or DB swing (or RDL) · Push up · Reverse lunge · Plank hold · Rest 60 sec between rounds" },
+    ],
+    journal: "Halfway point. Where are you compared to week 1? What has changed — physically, mentally, in your daily habits?",
+    nutrition_pre: "By now you have a feel for what works before training. Stick with what makes you feel energized.",
+    nutrition_post: "Don't skip your post-workout meal. This is when your muscles are most receptive to rebuilding.",
+    nutrition_tip: "Hunger is information, not an emergency. Before reaching for a snack, drink a full glass of water and wait 10 minutes.",
+    week_focus: "The halfway check-in matters. Notice what has shifted — even the small things. Small shifts compound into big results."
+  },
+  {
+    num: 5,
+    title: "Strength is Building",
+    desc: "Your body has changed more than you can see yet. Week 5 is where things start to feel noticeably different. Trust what you have built.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Rowing or bike 2 min easy · Leg swings 10 each · Hip 90-90 stretch · Band pull apart × 15 · Squat to stand × 8 · Glute bridge × 10" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "4 rounds. Rest 40 sec between exercises. Load is increasing." },
+      { name: "Squat", detail: "Foundation: Goblet squat × 12 — heavier than last week | Strong: Barbell back squat × 8 — controlled descent, drive through heels" },
+      { name: "Pull", detail: "Foundation: DB row × 12 each side — heavier than week 4 | Strong: Barbell or KB bent over row × 10 — brace hard" },
+      { name: "Hinge", detail: "Foundation: Hip thrust on bench × 15 with DB on hips | Strong: Barbell hip thrust × 12 — full lockout at top" },
+      { name: "Lunge + Core", detail: "Foundation: Walking lunge × 10 each leg bodyweight | Strong: Walking lunge with DBs × 10 each leg + plank × 30 sec after each set" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "Turf work — 3 rounds: Sprint or fast walk turf length · 10 KB swings or RDLs · 10 push ups · 20 mountain climbers. Rest 60 sec between rounds." },
+    ],
+    journal: "What is one thing you have learned about yourself in this program so far?",
+    nutrition_pre: "Energy levels should be stabilizing. If you still feel sluggish — look at your sleep and your carb intake.",
+    nutrition_post: "Protein + carb + hydration. Every time. Non-negotiable.",
+    nutrition_tip: "This week focus on eating slowly. Put your fork down between bites. It takes 20 minutes for your brain to register fullness.",
+    week_focus: "Strength is not just physical. Notice how you are showing up differently outside the gym too."
+  },
+  {
+    num: 6,
+    title: "Pushing Forward",
+    desc: "You know these movements now. You trust your body. Week 6 is about pushing past the comfortable and seeing what you are really capable of.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Jump rope or jog 90 sec · Banded squat walk × 12 each way · Inchworm × 6 · World's greatest stretch × 5 each · Hip thrust × 10 bodyweight" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "4 rounds. Rest 40 sec. This week we superset — two exercises back to back before resting." },
+      { name: "Superset A", detail: "Foundation: Goblet squat × 12 + DB row × 10 each — rest 45 sec | Strong: Barbell squat × 8 + barbell or DB row × 10 — rest 45 sec" },
+      { name: "Superset B", detail: "Foundation: Hip thrust × 15 + reverse lunge × 10 each — rest 45 sec | Strong: Barbell hip thrust × 12 + walking lunge with DBs × 10 each — rest 45 sec" },
+      { name: "Superset C", detail: "Foundation: Push up × 10 + plank × 30 sec — rest 45 sec | Strong: DB floor press × 12 + plank with shoulder tap × 20 — rest 45 sec" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "AMRAP 9 min: 10 KB swings or RDLs · 8 push ups · 10 reverse lunges each leg · 30 sec plank. Beat your round count from week 3." },
+    ],
+    journal: "What does feeling strong mean to you? Write freely — don't edit yourself.",
+    nutrition_pre: "Six weeks in — your nutrition habits should feel more natural. What one thing has been hardest to stay consistent with?",
+    nutrition_post: "If you are training harder you may need slightly more food. Listen to your body.",
+    nutrition_tip: "Portion control check-in. Protein — palm. Vegetables — fist. Carbs — cupped hand. Fat — thumb. Every meal.",
+    week_focus: "Two weeks left. Don't coast. Finish the way you started — showing up fully and giving it everything."
+  },
+  {
+    num: 7,
+    title: "The Final Push",
+    desc: "One week from the finish line. This is where it counts — not just physically, but mentally. Show yourself what you are made of.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Bike or row 2 min · Banded glute walk · Hip 90-90 · Arm circles · Squat to stand × 10 · Hip thrust × 12 activation" },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "4 rounds. Heaviest weights of the program. Rest 40 sec. You are stronger than week 1 — prove it." },
+      { name: "Squat", detail: "Foundation: Goblet squat × 12 — heaviest weight yet | Strong: Barbell back squat × 6-8 — go heavier than last week" },
+      { name: "Hinge", detail: "Foundation: Hip thrust on bench with DB × 15 — add weight | Strong: Barbell hip thrust × 12 — heaviest of the program" },
+      { name: "Push + Pull", detail: "Foundation: Push up × 12 + DB row × 12 each | Strong: DB floor press × 12 + barbell row × 10 — superset, no rest between" },
+      { name: "Carry + Core", detail: "Foundation: Farmer carry heavy × 40 sec + dead bug × 10 each | Strong: Heavy farmer carry × 40 sec + plank × 45 sec + 15 shoulder taps" },
+      { name: "⚡ CONDITIONING FINISHER — 10 min", detail: "Turf sprints + strength: 5 rounds — Sprint or fast walk turf length · 10 KB swings · 10 push ups · Walk back = rest. This is your last hard finisher. Leave it all out there." },
+    ],
+    journal: "What are you most proud of from these 8 weeks? Not what others see — what YOU know about yourself.",
+    nutrition_pre: "Fuel your second-to-last session like it matters. Because it does.",
+    nutrition_post: "Recovery is part of training. Sleep, hydration, and your post-workout meal all matter equally.",
+    nutrition_tip: "Notice how your relationship with food has shifted. Are you eating with more intention? Less guilt? More awareness? That is the real win.",
+    week_focus: "Week 8 is the celebration. This week is the work. Show up."
+  },
+  {
+    num: 8,
+    title: "Finish Strong",
+    desc: "Eight weeks. You did it. This final session is a celebration of everything you have built — every time you showed up, every rep when you didn't feel like it.",
+    workout: [
+      { name: "🔥 WARM UP — 5 min", detail: "Your choice — whatever makes your body feel good and ready. You know how to warm up now. Trust yourself." },
+      { name: "💪 STRENGTH BLOCK — 25 min", detail: "4 rounds. Your choice of load — go with what feels strong and confident today. This is YOUR session." },
+      { name: "Squat — Your Choice", detail: "Foundation: Goblet squat × 12 — your best weight | Strong: Barbell squat × 8 — celebrate how far your squat has come" },
+      { name: "Hinge — Your Choice", detail: "Foundation: Hip thrust × 15 — heaviest you've done | Strong: Barbell hip thrust × 12 — feel the difference from week 1" },
+      { name: "Push + Pull", detail: "Foundation: Push up × max reps + DB row × 12 | Strong: Floor press × 12 + barbell row × 10 — superset" },
+      { name: "⚡ FINAL FINISHER — 10 min", detail: "Best of 8 weeks — YOU choose the movements. Pick your 4 favorites from the program. AMRAP 8 min. End with something that makes you feel powerful." },
+    ],
+    journal: "Write a letter to yourself on Week 1. What do you want her — or him — to know?",
+    nutrition_pre: "Fuel your final session like the athlete you have become.",
+    nutrition_post: "Celebrate. Eat something that makes you feel good. You absolutely earned it.",
+    nutrition_tip: "This is not the end of the journey — it is the end of the beginning. Keep the habits. Keep the consistency. Keep showing up.",
+    week_focus: "What comes next? Group training starts now. Your spot is waiting. You have built the foundation — now let's build the strength."
+  }
+];
+
+
+const habitsData = [
+  { emoji: "💧", label: "Drank enough water today" },
+  { emoji: "👣", label: "Hit my step goal" },
+  { emoji: "🥩", label: "Hit my protein at every meal" },
+  { emoji: "😴", label: "Got 7+ hours of sleep" },
+  { emoji: "🧘", label: "Did one mindset thing for myself" },
+];
+
+let currentWeek = 0;
+let habits = JSON.parse(localStorage.getItem('habits_8ws') || '{}');
+let exercises = JSON.parse(localStorage.getItem('exercises_8ws') || '{}');
+let journals = JSON.parse(localStorage.getItem('journals_8ws') || '{}');
+
+function saveHabits() { localStorage.setItem('habits_8ws', JSON.stringify(habits)); }
+function saveExercises() { localStorage.setItem('exercises_8ws', JSON.stringify(exercises)); }
+function saveJournals() { localStorage.setItem('journals_8ws', JSON.stringify(journals)); }
+
+function getWeekPct(w) { return Math.round(((w + 1) / 8) * 100); }
+
+function renderPills() {
+  const container = document.getElementById('weekPills');
+  container.innerHTML = weeks.map((w, i) => `
+    <div class="week-pill ${i === currentWeek ? 'active' : ''}" onclick="switchWeek(${i})">
+      Week ${w.num}
+    </div>
+  `).join('');
+}
+
+function switchWeek(i) {
+  currentWeek = i;
+  renderPills();
+  renderContent();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleHabit(weekIdx, habitIdx) {
+  const key = `${weekIdx}_${habitIdx}`;
+  habits[key] = !habits[key];
+  saveHabits();
+  renderContent();
+}
+
+function toggleExercise(weekIdx, exIdx) {
+  const key = `${weekIdx}_${exIdx}`;
+  exercises[key] = !exercises[key];
+  saveExercises();
+  renderContent();
+}
+
+function saveJournal(weekIdx) {
+  const val = document.getElementById(`journal_${weekIdx}`).value;
+  journals[weekIdx] = val;
+  saveJournals();
+  const note = document.getElementById(`saved_${weekIdx}`);
+  note.style.display = 'block';
+  setTimeout(() => { note.style.display = 'none'; }, 2000);
+}
+
+function renderContent() {
+  const w = weeks[currentWeek];
+  const wi = currentWeek;
+  const pct = getWeekPct(wi);
+
+  const habitHTML = habitsData.map((h, hi) => {
+    const key = `${wi}_${hi}`;
+    const checked = habits[key];
+    return `
+      <div class="habit-item ${checked ? 'checked' : ''}" onclick="toggleHabit(${wi}, ${hi})">
+        <span class="habit-emoji">${h.emoji}</span>
+        <span class="habit-label">${h.label}</span>
+        <div class="habit-check">${checked ? '✓' : ''}</div>
+      </div>
+    `;
+  }).join('');
+
+  const exerciseHTML = w.workout.map((ex, ei) => {
+    const key = `${wi}_${ei}`;
+    const done = exercises[key];
+    return `
+      <div class="exercise-item">
+        <div class="exercise-num">${ei + 1}</div>
+        <div class="exercise-info">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-detail">${ex.detail}</div>
+        </div>
+        <div class="exercise-check ${done ? 'done' : ''}" onclick="toggleExercise(${wi}, ${ei})">
+          ${done ? '✓' : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const dotsHTML = weeks.map((_, di) => {
+    let cls = '';
+    if (di < wi) cls = 'done';
+    else if (di === wi) cls = 'current';
+    return `<div class="progress-dot ${cls}">${di + 1}</div>`;
+  }).join('');
+
+  const journalVal = journals[wi] || '';
+
+  document.getElementById('mainContent').innerHTML = `
+
+    <div class="progress-section">
+      <div class="progress-label">
+        <span class="progress-title">Your Journey</span>
+        <span class="progress-pct">${pct}% Complete</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${pct}%"></div>
+      </div>
+      <div class="progress-weeks">${dotsHTML}</div>
+    </div>
+
+    <div class="week-hero" data-week="${w.num}">
+      <div class="week-hero-label">Week ${w.num} of 8</div>
+      <div class="week-hero-title">${w.title}</div>
+      <div class="week-hero-desc">${w.desc}</div>
+    </div>
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">This Week's Workout</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">💪</div>
+        <div>
+          <div class="card-title">Home Workout</div>
+          <div class="card-subtitle">Check off each movement as you complete it</div>
+        </div>
+      </div>
+      <div class="exercise-list">${exerciseHTML}</div>
+    </div>
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Daily Habits</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✅</div>
+        <div>
+          <div class="card-title">Today's Checklist</div>
+          <div class="card-subtitle">Tap each habit to check it off</div>
+        </div>
+      </div>
+      <div class="habit-list">${habitHTML}</div>
+    </div>
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Nutrition</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🥗</div>
+        <div>
+          <div class="card-title">Fueling Your Body</div>
+          <div class="card-subtitle">Pre & post workout guidance</div>
+        </div>
+      </div>
+      <div class="nutrition-block">
+        <div class="nutrition-card">
+          <div class="nutrition-card-title">Before</div>
+          <p>${w.nutrition_pre}</p>
+        </div>
+        <div class="nutrition-card">
+          <div class="nutrition-card-title">After</div>
+          <p>${w.nutrition_post}</p>
+        </div>
+      </div>
+      <div class="nutrition-tip">💡 ${w.nutrition_tip}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✋</div>
+        <div>
+          <div class="card-title">Portion Guide</div>
+          <div class="card-subtitle">Use your hand as your measuring tool</div>
+        </div>
+      </div>
+      <div class="portion-grid">
+        <div class="portion-item">
+          <div class="portion-emoji">🥩</div>
+          <div class="portion-name">Protein</div>
+          <div class="portion-size">Palm size</div>
+          <div class="portion-desc">Chicken, fish, eggs, Greek yogurt</div>
+        </div>
+        <div class="portion-item">
+          <div class="portion-emoji">🥦</div>
+          <div class="portion-name">Vegetables</div>
+          <div class="portion-size">Fist size</div>
+          <div class="portion-desc">Fill half your plate — always</div>
+        </div>
+        <div class="portion-item">
+          <div class="portion-emoji">🍚</div>
+          <div class="portion-name">Carbs</div>
+          <div class="portion-size">Cupped hand</div>
+          <div class="portion-desc">Rice, oats, sweet potato, fruit</div>
+        </div>
+        <div class="portion-item">
+          <div class="portion-emoji">🥑</div>
+          <div class="portion-name">Healthy Fat</div>
+          <div class="portion-size">Thumb size</div>
+          <div class="portion-desc">Avocado, olive oil, nuts</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Mindset & Journal</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📓</div>
+        <div>
+          <div class="card-title">This Week's Reflection</div>
+          <div class="card-subtitle">Your thoughts stay here — private and yours</div>
+        </div>
+      </div>
+      <div class="journal-prompt">${w.journal}</div>
+      <textarea class="journal-textarea" id="journal_${wi}" placeholder="Write freely...">${journalVal}</textarea>
+      <button class="save-btn" onclick="saveJournal(${wi})">Save My Reflection</button>
+      <div class="saved-note" id="saved_${wi}">✓ Saved</div>
+    </div>
+
+    <div class="card" style="background: var(--green-light); border: 1px solid rgba(74,124,89,0.2);">
+      <div class="card-header">
+        <div class="card-icon" style="background: white;">🎯</div>
+        <div>
+          <div class="card-title" style="color: var(--green-dark);">Week ${w.num} Focus</div>
+        </div>
+      </div>
+      <p style="font-size: 14px; color: var(--mid); line-height: 1.7; font-style: italic;">${w.week_focus}</p>
+    </div>
+
+    ${wi === 7 ? `
+    <div class="card" style="background: var(--green); text-align: center; padding: 28px;">
+      <div style="font-size: 40px; margin-bottom: 12px;">🏆</div>
+      <div style="font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: white; margin-bottom: 8px;">You Finished 8 Week Strong</div>
+      <div style="font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 16px;">This is just the beginning. Group training starts now — your spot is waiting.</div>
+      <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 14px; color: white;">
+        <div style="font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; opacity: 0.7;">Next Step</div>
+        <div style="font-weight: 700; font-size: 15px;">Join Group Training</div>
+        <div style="font-size: 13px; opacity: 0.8; margin-top: 4px;">Once/week $200/mo · Twice/week $400/mo</div>
+      </div>
+    </div>
+    ` : ''}
+  `;
+}
+
+renderPills();
+renderContent();
+</script>
+</body>
+</html>
